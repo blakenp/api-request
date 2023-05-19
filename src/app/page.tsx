@@ -16,6 +16,13 @@ const sendData = async () => {
   } catch (error) {
     console.error('Error sending POST request:', error);
   }
+
+  return (
+    <div>
+      <button onClick={sendData}>Send Webhook Request</button>
+    </div>
+  );
+
 };
 
 sendData();
