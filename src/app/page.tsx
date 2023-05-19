@@ -1,30 +1,21 @@
-'use client';
-
-import React from 'react';
 import axios from 'axios';
 
-export default function Home() {
-  const handleWebhookRequest = () => {
-    axios
-      .post<{ message: string }>('https://webhooks-black.vercel.app/api/webhook', {
-        event: 'user.created',
-        data: {
-          userId: '123',
-        },
-      })
-      .then(response => {
-        console.log('Webhook request successful');
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error('Webhook request failed wahhhh');
-        console.error(error);
-      });
-  };
+const sendData = async () => {
+  try {
+    const url = 'https://webhooks-black.vercel.app/api/route/webhooks.ts'; // Replace with your URL
 
-  return (
-    <div>
-      <button onClick={handleWebhookRequest}>Send Webhook Request</button>
-    </div>
-  );
+    const data = {
+      // The data you want to send in the POST request
+      key1: 'value1',
+      key2: 'value2',
+    };
+
+    const response = await axios.post(url, data);
+
+    console.log(response.data); // Process the response data as needed
+  } catch (error) {
+    console.error('Error sending POST request:', error);
+  }
 };
+
+sendData();
