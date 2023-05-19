@@ -6,7 +6,7 @@ import axios from 'axios';
 export default function Home() {
   const handleWebhookRequest = () => {
     axios
-      .post<{ message: string }>('https://webhooks-black.vercel.app/api/webhooks', {
+      .post<{ message: string }>('https://webhooks-black.vercel.app/api/webhooks/', {
         event: 'user.created',
         data: {
           userId: '123',
@@ -17,7 +17,7 @@ export default function Home() {
         console.log(response.data);
       })
       .catch(error => {
-        console.error('Webhook request failed');
+        console.error('Webhook request failed wahhhh');
         console.error(error);
       });
   };
