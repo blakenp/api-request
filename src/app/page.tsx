@@ -6,7 +6,7 @@ import axios from 'axios';
 export default function Home() {
   const handleWebhookRequest = () => {
     axios
-      .post<{ message: string }>('https://webhooks-black.vercel.app/api/webhooks', {
+      .post<{ message: string }>('https://webhooks-black.vercel.app/api/webhook/webhooks', {
         event: 'user.created',
         data: {
           userId: '123',
