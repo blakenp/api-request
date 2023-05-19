@@ -4,7 +4,7 @@ import React from 'react';
 import { redirect } from "next/navigation";
 import axios from 'axios';
 
-export async function Redirect() {
+export default function Redirect() {
   const getRedirect = async() => {
     redirect(`https://webhooks-black.vercel.app/api/webhook`);
   }
