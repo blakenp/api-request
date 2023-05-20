@@ -8,7 +8,7 @@ export default function Home() {
   const [comment, setComment] = useState("")
 
   const getComments = async () => {
-    await fetch('https://webhooks-black.vercel.app/api/webhook')
+    await fetch(`https://webhooks-black.vercel.app/api/webhook`)
     .then(async (response) => {
       let data = await response.json()
       console.log(data[0].text)
@@ -17,7 +17,7 @@ export default function Home() {
   }
 
   const submitComment = async () => {
-    await fetch('https://webhooks-black.vercel.app/api/webhook', {
+    await fetch(`https://webhooks-black.vercel.app/api/webhook`, {
       method: 'POST',
       body: JSON.stringify({ comment: comment }),
       headers: {
@@ -25,6 +25,13 @@ export default function Home() {
       },
     })
     setComment('')
+  }
+
+  const deleteComment = async (commentId: number) => {
+    await fetch(`https://webhooks-black.vercel.app/api/webhook/${commentId}`, {
+      method: 'DELETE',
+    })
+    getComments()
   }
 
   return (
@@ -41,6 +48,7 @@ export default function Home() {
           return (
             <div key={comment.id}>
               {comment.id} {comment.text}
+              <button onClick={() => deleteComment(comment.id)}>Delete</button>
             </div>
           )
         })
