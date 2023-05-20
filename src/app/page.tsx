@@ -8,7 +8,7 @@ export default function Home() {
   const [comment, setComment] = useState("")
 
   const getComments = async () => {
-    await fetch('/api/webhook')
+    await fetch('https://webhooks-black.vercel.app/api/webhook')
     .then(async (response) => {
       let data = await response.json()
       console.log(data[0].text)
@@ -17,7 +17,7 @@ export default function Home() {
   }
 
   const submitComment = async () => {
-    await fetch('/api/webhook', {
+    await fetch('https://webhooks-black.vercel.app/api/webhook', {
       method: 'POST',
       body: JSON.stringify({ comment: comment }),
       headers: {
