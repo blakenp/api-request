@@ -17,20 +17,24 @@ export default function Home() {
   }
 
   const submitComment = async () => {
-    await fetch(`https://webhooks-black.vercel.app/api/webhook`, {
+    const response = await fetch(`https://webhooks-black.vercel.app/api/webhook`, {
       method: 'POST',
       body: JSON.stringify({ comment: comment }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
+    const data = response.json
+    console.log(data)
     setComment('')
   }
 
-  const deleteComment = async (commentId: number) => {
-    await fetch(`https://webhooks-black.vercel.app/api/webhook/${commentId}`, {
+  const deleteComment = async (commentId: any) => {
+    const response = await fetch(`https://webhooks-black.vercel.app/api/webhook/${commentId}`, {
       method: 'DELETE',
     })
+    const data = await response.json
+    console.log(data)
     getComments()
   }
 
