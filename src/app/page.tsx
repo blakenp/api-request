@@ -29,7 +29,7 @@ export default function Home() {
     setComment('')
   }
 
-  const deleteComment = async (commentId: any) => {
+  const deleteComment = async (commentId: number) => {
     const response = await fetch(`https://webhooks-black.vercel.app/api/webhook/${commentId}`, {
       method: 'DELETE',
     })
