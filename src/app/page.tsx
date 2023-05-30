@@ -24,8 +24,22 @@ export default function Home() {
         'Content-Type': 'application/json',
       },
     })
-    const data = response.json
+    const data = await response.json
     console.log(data)
+    setComment('')
+  }
+
+  const editComment = async (commentId: number) => {
+    const response = await fetch(`https://webhooks-black.vercel.app/api/webhook/${commentId}`, {
+      method: 'PUT',
+      body: JSON.stringify({comment: comment}),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const data = await response.json
+    console.log(data)
+    getComments()
     setComment('')
   }
 
@@ -38,6 +52,14 @@ export default function Home() {
     getComments()
   }
 
+  const setCommentItemEditText = (commentId: number, text: string) => {
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.id === commentId ? { ...comment, editText: text } : comment
+      )
+    );
+  };
+
   return (
     <>
       <input 
@@ -48,11 +70,17 @@ export default function Home() {
       <button onClick={submitComment}>Submit comment</button>
       <button onClick={getComments}>Load Comments</button>
       {
-        comments.map(comment => {
+        comments.map(comments => {
           return (
-            <div key={comment.id}>
-              {comment.id} {comment.text}
-              <button onClick={() => deleteComment(comment.id)}>Delete</button>
+            <div key={comments.id}>
+              {comments.id} {comments.text}
+              <input 
+                type='text'
+                value={comment}
+                onChange={(event) => setComment(event.target.value)}
+              />
+              <button onClick={() => editComment(comments.id)}>Edit</button>
+              <button onClick={() => deleteComment(comments.id)}>Delete</button>
             </div>
           )
         })
