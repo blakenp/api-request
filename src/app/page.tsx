@@ -5,7 +5,8 @@ import { useState } from 'react';
 
 export default function Home() {
   const [comments, setComments] = useState<any[]>([])
-  const [comment, setComment] = useState("")
+  const [commentSubmission, setCommentSubmission] = useState('')
+  const [editedComments, setEditedComments] = useState<{ [commentId: number]: string }>({});
 
   const getComments = async () => {
     await fetch(`https://webhooks-black.vercel.app/api/webhook`)
@@ -19,20 +20,23 @@ export default function Home() {
   const submitComment = async () => {
     const response = await fetch(`https://webhooks-black.vercel.app/api/webhook`, {
       method: 'POST',
-      body: JSON.stringify({ comment: comment }),
+      body: JSON.stringify({ comment: commentSubmission }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
     const data = await response.json
     console.log(data)
-    setComment('')
+    getComments()
+    setCommentSubmission('')
   }
 
   const editComment = async (commentId: number) => {
+    const editedText = editedComments[commentId];
+
     const response = await fetch(`https://webhooks-black.vercel.app/api/webhook/${commentId}`, {
       method: 'PUT',
-      body: JSON.stringify({comment: comment}),
+      body: JSON.stringify({ comment: editedText }),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -40,7 +44,12 @@ export default function Home() {
     const data = await response.json
     console.log(data)
     getComments()
-    setComment('')
+
+    const updatedEditedComments = {
+      ...editedComments,
+      [commentId]: ''
+    };
+    setEditedComments(updatedEditedComments);
   }
 
   const deleteComment = async (commentId: number) => {
@@ -52,20 +61,12 @@ export default function Home() {
     getComments()
   }
 
-  const setCommentItemEditText = (commentId: number, text: string) => {
-    setComments((prevComments) =>
-      prevComments.map((comment) =>
-        comment.id === commentId ? { ...comment, editText: text } : comment
-      )
-    );
-  };
-
   return (
     <>
       <input 
         type='text'
-        value={comment}
-        onChange={(event) => setComment(event.target.value)}
+        value={commentSubmission}
+        onChange={(event) => setCommentSubmission(event.target.value)}
       />
       <button onClick={submitComment}>Submit comment</button>
       <button onClick={getComments}>Load Comments</button>
@@ -74,10 +75,16 @@ export default function Home() {
           return (
             <div key={comments.id}>
               {comments.id} {comments.text}
-              <input 
+              <input
                 type='text'
-                value={comment}
-                onChange={(event) => setComment(event.target.value)}
+                value={editedComments[comments.id] || ''}
+                onChange={(event) => {
+                  const updatedEditedComments = {
+                    ...editedComments,
+                    [comments.id]: event.target.value
+                  };
+                  setEditedComments(updatedEditedComments);
+                }}
               />
               <button onClick={() => editComment(comments.id)}>Edit</button>
               <button onClick={() => deleteComment(comments.id)}>Delete</button>
