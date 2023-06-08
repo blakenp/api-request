@@ -7,18 +7,18 @@ import axios from 'axios';
 export default function Home() {
   const [comments, setComments] = useState<any[]>([])
   const [commentSubmission, setCommentSubmission] = useState('')
-  const [editedComments, setEditedComments] = useState<{ [commentId: number]: string }>({});
+  const [editedComments, setEditedComments] = useState<{ [commentId: number]: string }>({})
 
   const getComments = async () => {
     try {
-      const response = await axios.get('https://webhooks-black.vercel.app/api/webhook');
-      const data = response.data;
-      console.log(data);
-      setComments(data);
+      const response = await axios.get('https://webhooks-black.vercel.app/api/webhook')
+      const data = response.data
+      console.log(data)
+      setComments(data)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const submitComment = async () => {
     try {
@@ -28,49 +28,49 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json'
         }
-      });
-      const data = response.data;
-      console.log(data);
-      getComments();
-      setCommentSubmission('');
+      })
+      const data = response.data
+      console.log(data)
+      getComments()
+      setCommentSubmission('')
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const editComment = async (commentId: number) => {
     try {
-      const editedText = editedComments[commentId];
+      const editedText = editedComments[commentId]
       const response = await axios.put(`https://webhooks-black.vercel.app/api/webhook/${commentId}`, {
         comment: editedText
       }, {
         headers: {
           'Content-Type': 'application/json'
         }
-      });
-      const data = response.data;
-      console.log(data);
-      getComments();
+      })
+      const data = response.data
+      console.log(data)
+      getComments()
       const updatedEditedComments = {
         ...editedComments,
         [commentId]: ''
-      };
-      setEditedComments(updatedEditedComments);
+      }
+      setEditedComments(updatedEditedComments)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const deleteComment = async (commentId: number) => {
     try {
-      const response = await axios.delete(`https://webhooks-black.vercel.app/api/webhook/${commentId}`);
-      const data = response.data;
-      console.log(data);
-      getComments();
+      const response = await axios.delete(`https://webhooks-black.vercel.app/api/webhook/${commentId}`)
+      const data = response.data
+      console.log(data)
+      getComments()
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   return (
     <>
@@ -94,7 +94,7 @@ export default function Home() {
                     ...editedComments,
                     [comments.id]: event.target.value
                   };
-                  setEditedComments(updatedEditedComments);
+                  setEditedComments(updatedEditedComments)
                 }}
               />
               <button onClick={() => editComment(comments.id)}>Edit</button>
